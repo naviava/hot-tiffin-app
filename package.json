@@ -22,11 +22,14 @@
     "lucide-react": "^0.290.0",
     "next": "14.0.0",
     "next-auth": "^4.24.4",
+    "query-string": "^8.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^4.11.0",
     "sonner": "^1.0.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -34,6 +37,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.6",
     "autoprefixer": "^10",
     "eslint": "^8",
     "eslint-config-next": "14.0.0",

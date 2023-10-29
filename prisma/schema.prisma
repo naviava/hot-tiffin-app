@@ -45,27 +45,165 @@ model VerificationToken {
 }
 
 enum UserRole {
-  USER
+  CUSTOMER
   EMPLOYEE
   ADMIN
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String          @id @default(cuid())
   name           String
-  empId          String?   @unique
-  email          String    @unique
+  empId          String?         @unique
+  email          String          @unique
   emailVerified  DateTime?
   image          String?
-  hashedPassword String?   @db.Text
-  role           UserRole  @default(USER)
-  disabled       Boolean   @default(false)
+  hashedPassword String?         @db.Text
+  role           UserRole        @default(EMPLOYEE)
+  disabled       Boolean         @default(false)
   departmentId   String?
   accounts       Account[]
   sessions       Session[]
+  orders         Order[]
+  addresses      Address[]
+  paymentMethods PaymentMethod[]
+  reviews        Review[]
+  reservations   Reservation[]
+  favItems       MenuItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([departmentId])
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELED
+}
+
+enum OrderType {
+  DINE_IN
+  DELIVERY
+  PICKUP
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  type            OrderType     @default(DINE_IN)
+  status          OrderStatus   @default(NEW)
+  totalAmount     Float
+  customerId      String
+  customer        User          @relation(fields: [customerId], references: [id])
+  addressId       String
+  deliveryAddress Address       @relation(fields: [addressId], references: [id])
+  paymentMethodId String
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  items           OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId, addressId, paymentMethodId])
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  quantity   Int
+  price      Float
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@index([orderId, menuItemId])
+}
+
+model MenuItem {
+  id          String      @id @default(cuid())
+  name        String
+  description String      @db.Text
+  price       Float
+  image       String
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  favUserId   String?
+  favUser     User?       @relation(fields: [favUserId], references: [id])
+  orderItems  OrderItem[]
+  reviews     Review[]
+
+  @@index([categoryId])
+}
+
+model Address {
+  id            String  @id @default(cuid())
+  streetAddress String
+  city          String
+  state         String
+  postalCode    String
+  isDefault     Boolean
+  customerId    String
+  customer      User    @relation(fields: [customerId], references: [id])
+  orders        Order[]
+
+  @@index([customerId])
+}
+
+model PaymentMethod {
+  id         String  @id @default(cuid())
+  cardNumber String
+  expiryDate String
+  isDefault  Boolean
+  customerId String
+  customer   User    @relation(fields: [customerId], references: [id])
+  orders     Order[]
+
+  @@index([customerId])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  text       String?  @db.Text
+  rating     Float    @default(1)
+  customerId String
+  customer   User     @relation(fields: [customerId], references: [id])
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId, menuItemId])
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+model Reservation {
+  id              String            @id @default(cuid())
+  partySize       Int
+  reservationDate DateTime
+  specialRequests String?           @db.Text
+  status          ReservationStatus @default(PENDING)
+  customerId      String
+  customer        User              @relation(fields: [customerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  image     String?    @db.Text
+  menuItems MenuItem[]
 }
