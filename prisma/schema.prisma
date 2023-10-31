@@ -6,37 +6,38 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
+  userId            String  @db.ObjectId
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
   expires      DateTime
+  userId       String   @db.ObjectId
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
@@ -51,13 +52,13 @@ enum UserRole {
 }
 
 model User {
-  id             String          @id @default(cuid())
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   name           String
   empId          String?         @unique
   email          String          @unique
   emailVerified  DateTime?
   image          String?
-  hashedPassword String?         @db.Text
+  hashedPassword String?
   role           UserRole        @default(EMPLOYEE)
   disabled       Boolean         @default(false)
   departmentId   String?
@@ -92,16 +93,16 @@ enum OrderType {
 }
 
 model Order {
-  id              String        @id @default(cuid())
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
   orderNumber     String        @unique
   type            OrderType     @default(DINE_IN)
   status          OrderStatus   @default(NEW)
   totalAmount     Float
-  customerId      String
+  customerId      String        @db.ObjectId
   customer        User          @relation(fields: [customerId], references: [id])
-  addressId       String
+  addressId       String        @db.ObjectId
   deliveryAddress Address       @relation(fields: [addressId], references: [id])
-  paymentMethodId String
+  paymentMethodId String        @db.ObjectId
   paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
   items           OrderItem[]
 
@@ -112,26 +113,26 @@ model Order {
 }
 
 model OrderItem {
-  id         String   @id @default(cuid())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   quantity   Int
   price      Float
-  orderId    String
+  orderId    String   @db.ObjectId
   order      Order    @relation(fields: [orderId], references: [id])
-  menuItemId String
+  menuItemId String   @db.ObjectId
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
 
   @@index([orderId, menuItemId])
 }
 
 model MenuItem {
-  id          String      @id @default(cuid())
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  description String      @db.Text
+  description String?
   price       Float
-  image       String
-  categoryId  String
+  image       String?
+  categoryId  String      @db.ObjectId
   category    Category    @relation(fields: [categoryId], references: [id])
-  favUserId   String?
+  favUserId   String?     @db.ObjectId
   favUser     User?       @relation(fields: [favUserId], references: [id])
   orderItems  OrderItem[]
   reviews     Review[]
@@ -140,13 +141,13 @@ model MenuItem {
 }
 
 model Address {
-  id            String  @id @default(cuid())
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
   streetAddress String
   city          String
   state         String
   postalCode    String
   isDefault     Boolean
-  customerId    String
+  customerId    String  @db.ObjectId
   customer      User    @relation(fields: [customerId], references: [id])
   orders        Order[]
 
@@ -154,11 +155,11 @@ model Address {
 }
 
 model PaymentMethod {
-  id         String  @id @default(cuid())
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   cardNumber String
   expiryDate String
   isDefault  Boolean
-  customerId String
+  customerId String  @db.ObjectId
   customer   User    @relation(fields: [customerId], references: [id])
   orders     Order[]
 
@@ -166,12 +167,12 @@ model PaymentMethod {
 }
 
 model Review {
-  id         String   @id @default(cuid())
-  text       String?  @db.Text
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  text       String?
   rating     Float    @default(1)
-  customerId String
+  customerId String   @db.ObjectId
   customer   User     @relation(fields: [customerId], references: [id])
-  menuItemId String
+  menuItemId String   @db.ObjectId
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
 
   createdAt DateTime @default(now())
@@ -187,12 +188,12 @@ enum ReservationStatus {
 }
 
 model Reservation {
-  id              String            @id @default(cuid())
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
   partySize       Int
   reservationDate DateTime
-  specialRequests String?           @db.Text
+  specialRequests String?
   status          ReservationStatus @default(PENDING)
-  customerId      String
+  customerId      String            @db.ObjectId
   customer        User              @relation(fields: [customerId], references: [id])
 
   createdAt DateTime @default(now())
@@ -202,8 +203,8 @@ model Reservation {
 }
 
 model Category {
-  id        String     @id @default(cuid())
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
   name      String     @unique
-  image     String?    @db.Text
+  image     String?
   menuItems MenuItem[]
 }

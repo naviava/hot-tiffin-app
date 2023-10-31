@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import qs from "query-string";
@@ -13,50 +19,57 @@ import { BiSolidCustomize } from "react-icons/bi";
 import { BsFillClockFill } from "react-icons/bs";
 import { FaBellConcierge, FaCartShopping } from "react-icons/fa6";
 
+import { useMediaQuery } from "~/hooks/use-media-query";
+
 import { cn } from "~/lib/utils";
 
 const routes = [
   {
     id: uuid(),
-    icon: GoHomeFill,
+    Icon: GoHomeFill,
     label: "Home",
     paramsTag: null,
   },
   {
     id: uuid(),
-    icon: FaBellConcierge,
+    Icon: FaBellConcierge,
     label: "Menu",
     paramsTag: "menu",
   },
   {
     id: uuid(),
-    icon: FaCartShopping,
+    Icon: FaCartShopping,
     label: "Orders",
     paramsTag: "orders",
   },
   {
     id: uuid(),
-    icon: BsFillClockFill,
+    Icon: BsFillClockFill,
     label: "History",
     paramsTag: "history",
   },
   {
     id: uuid(),
-    icon: ImPieChart,
+    Icon: ImPieChart,
     label: "Reports",
     paramsTag: "reports",
   },
   {
     id: uuid(),
-    icon: BiSolidCustomize,
+    Icon: BiSolidCustomize,
     label: "Customize",
     paramsTag: "customize",
   },
 ];
 
-export default function SideNavbar() {
+interface Props {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function NavbarItems({ setIsOpen }: Props) {
   const router = useRouter();
   const pathname = usePathname();
+  const { isMobile } = useMediaQuery();
 
   const searchParams = useSearchParams();
   const currentTab = useMemo(() => searchParams.get("tab"), [searchParams]);
@@ -73,10 +86,12 @@ export default function SideNavbar() {
         { skipNull: true, skipEmptyString: true },
       );
 
+      if (isMobile) setIsOpen(false);
+
       setActiveSection(paramsTag);
       router.push(url);
     },
-    [pathname, router],
+    [pathname, router, setIsOpen, isMobile],
   );
 
   return (
@@ -97,7 +112,7 @@ export default function SideNavbar() {
               className="absolute inset-0 rounded-xl bg-theme/10"
             />
           )}
-          <route.icon size={20} />
+          <route.Icon size={20} />
           <span className="select-none text-sm">{route.label}</span>
         </li>
       ))}

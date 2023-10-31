@@ -1,12 +1,10 @@
 import CustomizePage from "~/components/dashboard/customize-page";
 
-interface DashboardHomePageProps {
+interface DashboardProps {
   searchParams: { tab: string | null };
 }
 
-export default function DashboardHomePage({
-  searchParams,
-}: DashboardHomePageProps) {
+export default function Dashboard({ searchParams }: DashboardProps) {
   const { tab } = searchParams;
 
   return (

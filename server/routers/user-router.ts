@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { db } from "~/lib/db";
-import { router, publicProcedure, privateProcedure } from "~/server/trpc";
+import { router, publicProcedure } from "~/server/trpc";
 
 export const userRouter = router({
   getUserProfile: publicProcedure.query(async () => {
