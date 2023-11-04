@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 
 import * as z from "zod";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { Variants, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -32,7 +32,11 @@ const menuItemSchema = z.object({
 
 export type MenuItemSchemaType = z.infer<typeof menuItemSchema>;
 
-export default function AddMenuItemForm() {
+interface Props {
+  animationVariants: Variants;
+}
+
+export default function AddMenuItemForm({ animationVariants }: Props) {
   const [file, setFile] = useState<File>();
   const { edgestore } = useEdgeStore();
 
@@ -69,68 +73,67 @@ export default function AddMenuItemForm() {
   );
 
   return (
-    <section className="flex-1">
-      <Form {...form}>
-        <motion.form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="max-w-xl space-y-8 rounded-3xl bg-white p-6"
-        >
-          <section>
-            <SingleImageDropzone
-              className="mx-auto"
-              width={200}
-              height={200}
-              value={file}
-              onChange={async (file) => {
-                setFile(file);
-                if (!file) return;
-                const res = await edgestore.publicFiles.upload({
-                  file,
-                  options: { temporary: true },
-                });
-                form.setValue("image", res.url);
-              }}
-            />
-          </section>
-          <section className="space-y-4">
-            <NameInput form={form} disabled={isLoading} />
-            <DescriptionInput form={form} disabled={isLoading} />
-            <div className="flex gap-x-4">
-              <PriceInput form={form} disabled={isLoading} />
-              <CategoryCombobox
-                form={form}
-                disabled={isLoading}
-                options={categories?.map((category) => ({
-                  label: category.name,
-                  value: category.id,
-                }))}
-              />
-            </div>
-          </section>
+    <Form {...form}>
+      <motion.form
+        variants={animationVariants}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-xl space-y-8 rounded-3xl bg-white p-6"
+      >
+        <section>
+          <SingleImageDropzone
+            className="mx-auto"
+            width={200}
+            height={200}
+            value={file}
+            onChange={async (file) => {
+              setFile(file);
+              if (!file) return;
+              const res = await edgestore.publicFiles.upload({
+                file,
+                options: { temporary: true },
+              });
+              form.setValue("image", res.url);
+            }}
+          />
+        </section>
+        <section className="space-y-4">
+          <NameInput form={form} disabled={isLoading} />
+          <DescriptionInput form={form} disabled={isLoading} />
           <div className="flex gap-x-4">
-            <Button
-              type="button"
+            <PriceInput form={form} disabled={isLoading} />
+            <CategoryCombobox
+              form={form}
               disabled={isLoading}
-              variant="theme-outline"
-              onClick={() => {
-                form.reset();
-                setFile(undefined);
-              }}
-              className="flex w-full items-center gap-x-2 text-lg transition active:scale-95"
-            >
-              <span className="text-sm">❌</span>Reset form
-            </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              variant="theme"
-              className="w-full text-lg transition active:scale-95"
-            >
-              Submit
-            </Button>
+              options={categories?.map((category) => ({
+                label: category.name,
+                value: category.id,
+              }))}
+            />
           </div>
-        </motion.form>
-      </Form>
-    </section>
+        </section>
+        <div className="flex gap-x-4">
+          <Button
+            type="button"
+            disabled={isLoading}
+            variant="theme-outline"
+            onClick={() => {
+              form.reset();
+              setFile(undefined);
+            }}
+            className="flex w-full items-center gap-x-2 text-lg transition active:scale-95"
+          >
+            <span className="text-sm">❌</span>Reset form
+          </Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="theme"
+            className="w-full text-lg transition active:scale-95"
+          >
+            Submit
+          </Button>
+        </div>
+      </motion.form>
+    </Form>
   );
 }

@@ -7,7 +7,7 @@ import { AnimatePresence, Variants, motion } from "framer-motion";
 
 import { useMediaQuery } from "~/hooks/use-media-query";
 
-import NavbarItems from "~/components/dashboard/navbar-items";
+import NavbarItems from "~/components/dashboard-layout/navbar-items";
 
 const backdropVariants: Variants = {
   hidden: { opacity: 0 },

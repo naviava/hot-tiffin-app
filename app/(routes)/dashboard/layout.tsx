@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { serverClient } from "~/app/_trpc/server-client";
-import Navbar from "~/components/dashboard/navbar";
+import Navbar from "~/components/dashboard-layout/navbar";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

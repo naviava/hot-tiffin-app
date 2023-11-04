@@ -1,4 +1,4 @@
-import CustomizePage from "~/components/dashboard/customize-page";
+import CustomizePage from "~/components/customize-page";
 
 interface DashboardProps {
   searchParams: { tab: string | null };
