@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import * as z from "zod";
 import { toast } from "sonner";
@@ -25,8 +25,13 @@ const menuItemSchema = z.object({
     .min(1, { message: "Name cannot be empty" })
     .max(50, { message: "Name cannot be longer than 50 characters" }),
   description: z.string().nullish(),
-  price: z.number().min(0, { message: "Price cannot be negative" }),
-  categoryId: z.string(),
+  price: z
+    .string()
+    .refine((value) => /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(value), {
+      message:
+        "Price must be a positive number with up to two digits after the decimal point",
+    }),
+  categoryId: z.string().min(1, { message: "Category cannot be empty" }),
   image: z.string().nullish(),
 });
 
@@ -47,7 +52,7 @@ export default function AddMenuItemForm({ animationVariants }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      price: 0,
+      price: "",
       categoryId: "",
       image: "",
     },
@@ -57,9 +62,13 @@ export default function AddMenuItemForm({ animationVariants }: Props) {
     onError: ({ message }) => toast.error(message),
     onSuccess: async () => {
       toast.success("Menu item added successfully");
-      await edgestore.publicFiles.confirmUpload({
-        url: form.getValues("image") as string,
-      });
+
+      if (!!form.getValues("image")) {
+        await edgestore.publicFiles.confirmUpload({
+          url: form.getValues("image") as string,
+        });
+      }
+
       form.reset();
       setFile(undefined);
     },
@@ -71,6 +80,10 @@ export default function AddMenuItemForm({ animationVariants }: Props) {
     },
     [addMenuItem],
   );
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
 
   return (
     <Form {...form}>

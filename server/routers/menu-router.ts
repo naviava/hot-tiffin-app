@@ -9,7 +9,12 @@ export const menuRouter = router({
       z.object({
         name: z.string().min(1).max(50),
         description: z.string().nullish(),
-        price: z.number().positive(),
+        price: z
+          .string()
+          .refine((value) => /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(value), {
+            message:
+              "Price must be a positive number with up to two digits after the decimal point",
+          }),
         image: z.string().nullish(),
         categoryId: z.string(),
       }),
@@ -21,7 +26,7 @@ export const menuRouter = router({
         data: {
           name,
           description,
-          price,
+          price: parseFloat(price),
           image,
           category: {
             connect: { id: categoryId },

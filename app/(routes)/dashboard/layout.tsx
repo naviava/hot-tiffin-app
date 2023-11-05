@@ -17,7 +17,7 @@ export default async function DashboardLayout({
   return (
     <div className="relative h-full">
       <Navbar />
-      <main className="h-[calc(100vh-48px)] pt-12 md:pl-[7rem]">
+      <main className="h-[calc(100vh-48px)] overflow-x-hidden pt-12 md:pl-[7rem] md:pt-0">
         {children}
       </main>
     </div>

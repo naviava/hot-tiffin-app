@@ -4,12 +4,11 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
-  useMemo,
+  useEffect,
   useState,
 } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import qs from "query-string";
 import { v4 as uuid } from "uuid";
 import { motion } from "framer-motion";
 
@@ -28,39 +27,42 @@ const routes = [
     id: uuid(),
     Icon: GoHomeFill,
     label: "Home",
-    paramsTag: null,
+    href: "/dashboard",
   },
   {
     id: uuid(),
     Icon: FaBellConcierge,
     label: "Menu",
-    paramsTag: "menu",
+    href: "/dashboard/menu",
   },
   {
     id: uuid(),
     Icon: FaCartShopping,
     label: "Orders",
-    paramsTag: "orders",
+    href: "/dashboard/orders",
   },
   {
     id: uuid(),
     Icon: BsFillClockFill,
     label: "History",
-    paramsTag: "history",
+    href: "/dashboard/history",
   },
   {
     id: uuid(),
     Icon: ImPieChart,
     label: "Reports",
-    paramsTag: "reports",
+    href: "/dashboard/reports",
   },
   {
     id: uuid(),
     Icon: BiSolidCustomize,
     label: "Customize",
-    paramsTag: "customize",
+    href: "/dashboard/customize",
   },
-];
+] as const;
+
+type RouteType = (typeof routes)[number];
+type RouteHrefType = RouteType["href"];
 
 interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -68,31 +70,25 @@ interface Props {
 
 export default function NavbarItems({ setIsOpen }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() as RouteHrefType;
   const { isMobile } = useMediaQuery();
-
-  const searchParams = useSearchParams();
-  const currentTab = useMemo(() => searchParams.get("tab"), [searchParams]);
-
-  const [activeSection, setActiveSection] = useState<string | null>(currentTab);
+  const [activeSection, setActiveSection] = useState<RouteHrefType | null>(
+    pathname.startsWith("/dashboard") ? pathname : null,
+  );
 
   const handleClick = useCallback(
-    (paramsTag: string | null) => {
-      const url = qs.stringifyUrl(
-        {
-          url: pathname,
-          query: { tab: paramsTag },
-        },
-        { skipNull: true, skipEmptyString: true },
-      );
-
+    (href: RouteHrefType) => {
       if (isMobile) setIsOpen(false);
 
-      setActiveSection(paramsTag);
-      router.push(url);
+      setActiveSection(href);
+      router.push(href);
     },
-    [pathname, router, setIsOpen, isMobile],
+    [router, setIsOpen, isMobile],
   );
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
 
   return (
     <ul className="space-y-8">
@@ -100,13 +96,13 @@ export default function NavbarItems({ setIsOpen }: Props) {
         <li
           key={route.id}
           role="button"
-          onClick={() => handleClick(route.paramsTag)}
+          onClick={() => handleClick(route.href)}
           className={cn(
             "relative flex flex-col items-center justify-center gap-y-2 rounded-xl px-2 py-4 text-muted-foreground transition hover:bg-neutral-200/20",
-            currentTab === route.paramsTag && "text-theme hover:bg-transparent",
+            pathname === route.href && "text-theme hover:bg-transparent",
           )}
         >
-          {activeSection === route.paramsTag && (
+          {activeSection === route.href && (
             <motion.div
               layoutId="active-section"
               className="absolute inset-0 rounded-xl bg-theme/10"

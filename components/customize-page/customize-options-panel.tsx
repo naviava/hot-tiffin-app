@@ -12,16 +12,17 @@ import { cn } from "~/lib/utils";
 
 export const routes = [
   { Icon: FaBowlFood, label: "Add Item", sectionId: "ADD_ITEM" },
-  { Icon: AiTwotoneEdit, label: "Edit Item", sectionId: "EDIT_ITEM" },
-  { Icon: RiDeleteBin6Fill, label: "Delete Item", sectionId: "DELETE_ITEM" },
+  { Icon: AiTwotoneEdit, label: "Manage Items", sectionId: "MANAGE_ITEMS" },
   { Icon: MdLibraryAdd, label: "Add Category", sectionId: "ADD_CATEGORY" },
-  { Icon: RiEditBoxFill, label: "Edit Category", sectionId: "EDIT_CATEGORY" },
   {
-    Icon: MdFolderDelete,
-    label: "Delete Category",
-    sectionId: "DELETE_CATEGORY",
+    Icon: RiEditBoxFill,
+    label: "Manage Categories",
+    sectionId: "MANAGE_CATEGORIES",
   },
 ] as const;
+
+type Route = (typeof routes)[number];
+export type SectionIdType = Route["sectionId"];
 
 const listVariants: Variants = {
   initial: { opacity: 0 },
@@ -33,7 +34,7 @@ const listVariants: Variants = {
 
 interface Props {
   activeSection: string | null;
-  setActiveSection: Dispatch<SetStateAction<string | null>>;
+  setActiveSection: Dispatch<SetStateAction<SectionIdType | null>>;
 }
 export default function CustomizeOptionsPanel({
   activeSection,

@@ -31,6 +31,10 @@ export default function Navbar() {
     else setIsOpen(true);
   }, [isMobile]);
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return null;
+
   return (
     <>
       {!isOpen && (

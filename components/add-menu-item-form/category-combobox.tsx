@@ -33,6 +33,7 @@ export default function CategoryCombobox({
             <FormControl>
               <Combobox options={options} {...field} disabled={disabled} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />

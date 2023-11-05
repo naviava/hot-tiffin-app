@@ -97,6 +97,7 @@ model Order {
   orderNumber     String        @unique
   type            OrderType     @default(DINE_IN)
   status          OrderStatus   @default(NEW)
+  customerNote    String?
   totalAmount     Float
   customerId      String        @db.ObjectId
   customer        User          @relation(fields: [customerId], references: [id])
@@ -113,13 +114,14 @@ model Order {
 }
 
 model OrderItem {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  quantity   Int
-  price      Float
-  orderId    String   @db.ObjectId
-  order      Order    @relation(fields: [orderId], references: [id])
-  menuItemId String   @db.ObjectId
-  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  quantity     Int
+  price        Float
+  customerNote String?
+  menuItemId   String   @db.ObjectId
+  menuItem     MenuItem @relation(fields: [menuItemId], references: [id])
+  orderId      String   @db.ObjectId
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId, menuItemId])
 }
@@ -148,7 +150,7 @@ model Address {
   postalCode    String
   isDefault     Boolean
   customerId    String  @db.ObjectId
-  customer      User    @relation(fields: [customerId], references: [id])
+  customer      User    @relation(fields: [customerId], references: [id], onDelete: Cascade)
   orders        Order[]
 
   @@index([customerId])
@@ -160,7 +162,7 @@ model PaymentMethod {
   expiryDate String
   isDefault  Boolean
   customerId String  @db.ObjectId
-  customer   User    @relation(fields: [customerId], references: [id])
+  customer   User    @relation(fields: [customerId], references: [id], onDelete: Cascade)
   orders     Order[]
 
   @@index([customerId])
@@ -173,7 +175,7 @@ model Review {
   customerId String   @db.ObjectId
   customer   User     @relation(fields: [customerId], references: [id])
   menuItemId String   @db.ObjectId
-  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -194,7 +196,7 @@ model Reservation {
   specialRequests String?
   status          ReservationStatus @default(PENDING)
   customerId      String            @db.ObjectId
-  customer        User              @relation(fields: [customerId], references: [id])
+  customer        User              @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

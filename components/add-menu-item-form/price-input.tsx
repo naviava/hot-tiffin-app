@@ -27,19 +27,14 @@ export default function PriceInput({ form, disabled }: Props) {
             </FormLabel>
             <FormControl>
               <Input
-                type="number"
-                min={0}
-                step={0.1}
+                type="text"
                 disabled={disabled}
                 placeholder="4.99"
                 className="text-lg font-semibold placeholder:text-base placeholder:font-normal"
                 {...field}
-                onChange={(evt) => {
-                  field.onChange(evt);
-                  form.setValue("price", Number(evt.target.value));
-                }}
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
