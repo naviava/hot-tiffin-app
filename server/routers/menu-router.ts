@@ -1,9 +1,12 @@
 import * as z from "zod";
 
 import { db } from "~/lib/db";
-import { router, staffProcedure } from "~/server/trpc";
+import { publicProcedure, router, staffProcedure } from "~/server/trpc";
 
 export const menuRouter = router({
+  /**
+   * MUTATION API: Adds a menu item to the database.
+   */
   addMenuItem: staffProcedure
     .input(
       z.object({
@@ -35,5 +38,35 @@ export const menuRouter = router({
       });
 
       return "Successfully added menu item";
+    }),
+
+  /**
+   * QUERY API: Gets all menu items from the database.
+   * Takes an optional categoryId parameter to filter by category.
+   */
+  getMenuItems: staffProcedure
+    .input(
+      z.object({
+        searchTerm: z.string().nullish(),
+        categoryId: z.string().nullish(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { searchTerm, categoryId } = input;
+
+      const menuItems = await db.menuItem.findMany({
+        where: {
+          name: searchTerm
+            ? { contains: searchTerm, mode: "insensitive" }
+            : undefined,
+          categoryId: categoryId ? { equals: categoryId } : undefined,
+        },
+        include: {
+          category: true,
+          favourites: true,
+        },
+      });
+
+      return menuItems;
     }),
 });
