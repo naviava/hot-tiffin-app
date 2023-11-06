@@ -29,6 +29,7 @@ const isAuthenticated = middleware(async (opts) => {
   return opts.next({
     ctx: {
       user: {
+        id: user.id,
         name: user.name,
         email: user.email,
         empId: user.empId,
@@ -63,6 +64,7 @@ const isStaff = middleware(async (opts) => {
   return opts.next({
     ctx: {
       user: {
+        id: user.id,
         name: user.name,
         email: user.email,
         empId: user.empId,

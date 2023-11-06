@@ -93,24 +93,25 @@ enum OrderType {
 }
 
 model Order {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  orderNumber     String        @unique
-  type            OrderType     @default(DINE_IN)
-  status          OrderStatus   @default(NEW)
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  orderNumber     String         @unique
+  type            OrderType      @default(DINE_IN)
+  status          OrderStatus    @default(NEW)
+  totalPrice      Float
+  totalWithTax    Float
   customerNote    String?
-  totalAmount     Float
-  customerId      String        @db.ObjectId
-  customer        User          @relation(fields: [customerId], references: [id])
-  addressId       String        @db.ObjectId
-  deliveryAddress Address       @relation(fields: [addressId], references: [id])
-  paymentMethodId String        @db.ObjectId
-  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  ownerId         String         @db.ObjectId
+  owner           User           @relation(fields: [ownerId], references: [id])
+  addressId       String?        @db.ObjectId
+  deliveryAddress Address?       @relation(fields: [addressId], references: [id])
+  paymentMethodId String?        @db.ObjectId
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
   items           OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([customerId, addressId, paymentMethodId])
+  @@index([ownerId, addressId, paymentMethodId])
 }
 
 model OrderItem {

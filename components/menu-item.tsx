@@ -5,14 +5,17 @@ import Image from "next/image";
 
 import { Info } from "lucide-react";
 import { FcLike } from "react-icons/fc";
+import { AnimatePresence } from "framer-motion";
 
+import { useOrderStore } from "~/hooks/use-order-store";
+
+import OrderQuantityButtons from "~/components/orders/order-quantity-buttons";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { useOrderStore } from "~/hooks/use-order-store";
 
 interface Props {
   id: string;
@@ -31,7 +34,7 @@ export default function MenuItem({
   category,
   favCount,
 }: Props) {
-  const { addToOrder } = useOrderStore();
+  const { items, addToOrder } = useOrderStore();
 
   const openItemDetails = useCallback(
     (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,6 +42,9 @@ export default function MenuItem({
     },
     [],
   );
+
+  const isItemInOrder = items.find((item) => item.id === id);
+  const quantity = !!isItemInOrder ? isItemInOrder.quantity : null;
 
   return (
     <div
@@ -76,12 +82,15 @@ export default function MenuItem({
           ${price.toFixed(2).toString().replace(".", ",")}
         </p>
       </div>
-      <div className="mb-8 flex w-full items-center justify-around">
+      <div className="mb-8 flex w-full items-center justify-between px-6">
         {/* TODO: Add actual number of likes */}
         <div className="flex flex-shrink-0 items-center transition">
           <FcLike className="mr-2" />
           <span>{favCount}</span>
         </div>
+        <AnimatePresence>
+          {!!quantity && <OrderQuantityButtons id={id} quantity={quantity} />}
+        </AnimatePresence>
         <button
           type="button"
           onClick={openItemDetails}

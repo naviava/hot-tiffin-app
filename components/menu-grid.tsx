@@ -36,7 +36,7 @@ export default function MenuGrid() {
     );
 
   return (
-    <div className="grid grid-cols-1 place-content-center place-items-center gap-x-8 gap-y-20 py-10 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid shrink-0 grid-cols-1 place-content-center place-items-center gap-x-8 gap-y-20 py-10 md:grid-cols-2 lg:grid-cols-3">
       {menuItems?.map((item) => (
         <MenuItem
           key={item.id}
