@@ -24,9 +24,7 @@ export default function MenuPage({}: Props) {
         <h2 className="text-2xl font-bold">Choose Items</h2>
         <MenuGrid />
       </section>
-      <section className="my-6 mr-4 hidden h-fit flex-col rounded-[2rem] bg-white px-6 py-6 xl:flex xl:max-w-sm xl:flex-1">
-        <OrderPanel />
-      </section>
+      <OrderPanel />
     </article>
   );
 }
