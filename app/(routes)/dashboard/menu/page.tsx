@@ -1,8 +1,8 @@
 import MenuGrid from "~/components/menu-grid";
 import SearchInput from "~/components/search-input";
-import OrderPanel from "~/components/orders/order-panel";
 import CategoryFilter from "~/components/category-filter";
-import MobileOrderCheckout from "~/components/orders/mobile-order-checkout";
+import OrderPanel from "~/components/order-panel/order-panel";
+import MobileOrderPanel from "~/components/order-panel/mobile-order-panel";
 
 export default function MenuPage() {
   return (
@@ -11,7 +11,7 @@ export default function MenuPage() {
         <div className="absolute -translate-y-10 translate-x-8 md:static md:translate-x-0 md:translate-y-0">
           <div className="flex w-full justify-between">
             <SearchInput placeholder="Search by item name..." />
-            <MobileOrderCheckout />
+            <MobileOrderPanel />
           </div>
         </div>
         <CategoryFilter />

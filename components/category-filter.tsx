@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import qs from "query-string";
@@ -46,12 +46,14 @@ export default function CategoryFilter({}: Props) {
 
   const handleClick = useCallback(
     (categoryId: string) => {
+      const parsedUrl = qs.parseUrl(window.location.href);
       setSelectedCategory((prev) => (prev === categoryId ? null : categoryId));
 
       const url = qs.stringifyUrl(
         {
           url: pathname,
           query: {
+            ...parsedUrl.query,
             category: selectedCategory === categoryId ? null : categoryId,
           },
         },

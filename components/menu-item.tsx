@@ -9,7 +9,7 @@ import { AnimatePresence } from "framer-motion";
 
 import { useOrderStore } from "~/store/use-order-store";
 
-import OrderQuantityButtons from "~/components/orders/order-quantity-buttons";
+import OrderQuantityButtons from "~/components/order-panel/order-quantity-buttons";
 import {
   Tooltip,
   TooltipContent,

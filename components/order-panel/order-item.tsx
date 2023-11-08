@@ -7,10 +7,10 @@ import { PencilLine } from "lucide-react";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 
 import { Separator } from "~/components/ui/separator";
-import OrderItemNote from "~/components/orders/order-item-note";
-import OrderItemHeader from "~/components/orders/order-item-header";
-import OrderItemNoteEditor from "~/components/orders/order-item-note-editor";
-import OrderQuantityButtons from "~/components/orders/order-quantity-buttons";
+import OrderItemNote from "~/components/order-panel/order-item-note";
+import OrderItemHeader from "~/components/order-panel/order-item-header";
+import OrderItemNoteEditor from "~/components/order-panel/order-item-note-editor";
+import OrderQuantityButtons from "~/components/order-panel/order-quantity-buttons";
 
 const animationVariants: Variants = {
   initial: { opacity: 0, y: 20 },
@@ -88,10 +88,10 @@ export default function OrderPanelItem({
             )}
           </AnimatePresence>
           {/* Item price. */}
-          <motion.h4 layout className="text-sm font-bold">
+          <h4 className="text-sm font-bold">
             ${(price * quantity).toFixed(2)}
-          </motion.h4>
-          <motion.div layout className="flex items-center justify-between">
+          </h4>
+          <div className="flex items-center justify-between">
             <OrderQuantityButtons
               id={id}
               quantity={quantity}
@@ -107,10 +107,12 @@ export default function OrderPanelItem({
                 <PencilLine className="h-4 w-4 text-muted-foreground" />
               </button>
             )}
-          </motion.div>
+          </div>
         </div>
       </motion.div>
-      <Separator className="mt-4" />
+      <motion.div layout>
+        <Separator className="mt-4" />
+      </motion.div>
     </motion.div>
   );
 }

@@ -6,10 +6,10 @@ import {
 } from "~/components/ui/tooltip";
 
 interface Props {
-  customerNote?: string;
+  customerNote?: string | undefined | null;
 }
 
-export default function OrderItemNote({ customerNote }: Props) {
+export default function OrderItemNote({ customerNote = "" }: Props) {
   return (
     <>
       {!!customerNote ? (

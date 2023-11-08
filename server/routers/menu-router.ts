@@ -47,18 +47,16 @@ export const menuRouter = router({
   getMenuItems: staffProcedure
     .input(
       z.object({
-        searchTerm: z.string().nullish(),
+        query: z.string().nullish(),
         categoryId: z.string().nullish(),
       }),
     )
     .query(async ({ input }) => {
-      const { searchTerm, categoryId } = input;
+      const { query, categoryId } = input;
 
       const menuItems = await db.menuItem.findMany({
         where: {
-          name: searchTerm
-            ? { contains: searchTerm, mode: "insensitive" }
-            : undefined,
+          name: query ? { contains: query, mode: "insensitive" } : undefined,
           categoryId: categoryId ? { equals: categoryId } : undefined,
         },
         include: {

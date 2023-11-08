@@ -11,7 +11,7 @@ import MenuGridSkeleton from "./loading-states/menu-grid-skeleton";
 export default function MenuGrid() {
   const searchParams = useSearchParams();
 
-  const searchTerm = useMemo(() => searchParams.get("search"), [searchParams]);
+  const query = useMemo(() => searchParams.get("q"), [searchParams]);
 
   const categoryId = useMemo(
     () => searchParams.get("category"),
@@ -19,7 +19,7 @@ export default function MenuGrid() {
   );
 
   const { data: menuItems, isFetching } = trpc.menu.getMenuItems.useQuery({
-    searchTerm,
+    query,
     categoryId,
   });
 

@@ -9,10 +9,10 @@ import { useOrderStore } from "~/store/use-order-store";
 import { useMediaQuery } from "~/hooks/use-media-query";
 
 import { Button } from "~/components/ui/button";
-import OrderHeader from "~/components/orders/order-header";
-import AllOrderItems from "~/components/orders/all-order-items";
-import OrderTypeSelector from "~/components/orders/order-type-selector";
-import OrderPriceDetails from "~/components/orders/order-price-details";
+import OrderHeader from "~/components/order-panel/order-header";
+import AllOrderItems from "~/components/order-panel/all-order-items";
+import OrderTypeSelector from "~/components/order-panel/order-type-selector";
+import OrderPriceDetails from "~/components/order-panel/order-price-details";
 
 import { cn } from "~/lib/utils";
 import { trpc } from "~/app/_trpc/client";

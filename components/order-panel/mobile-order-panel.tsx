@@ -4,7 +4,7 @@ import { ShoppingCart } from "lucide-react";
 
 import { useOrderStore } from "~/store/use-order-store";
 
-import OrderPanel from "~/components/orders/order-panel";
+import OrderPanel from "~/components/order-panel/order-panel";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 
 interface Props {}

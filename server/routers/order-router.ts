@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { OrderType } from "@prisma/client";
+import { OrderStatus, OrderType } from "@prisma/client";
 
 import { db } from "~/lib/db";
 import { generateOrderNo } from "~/lib/generate-order-no";
@@ -12,8 +12,6 @@ import {
 } from "~/server/trpc";
 import { TRPCError } from "@trpc/server";
 
-const OrderTypeEnum = z.nativeEnum(OrderType);
-
 export const orderRouter = router({
   /**
    * MUTATION API: Create a new order.
@@ -21,7 +19,7 @@ export const orderRouter = router({
   createOrder: privateProcedure
     .input(
       z.object({
-        type: OrderTypeEnum,
+        type: z.nativeEnum(OrderType),
         totalPrice: z.number(),
         totalWithTax: z.number(),
         customerNote: z.string().nullish(),
@@ -74,5 +72,51 @@ export const orderRouter = router({
       });
 
       return true;
+    }),
+
+  /**
+   * QUERY API: Get all orders. Takes an optional
+   * status parameter to filter by order status.
+   */
+  getAllOrders: staffProcedure
+    .input(z.object({ status: z.nativeEnum(OrderStatus).nullish() }))
+    .query(async ({ ctx, input }) => {
+      const { status } = input;
+
+      const orders = await db.order.findMany({
+        where: {
+          status: status ? { equals: status } : "NEW",
+        },
+        include: {
+          items: true,
+          owner: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      return orders ?? [];
+    }),
+
+  /**
+   * QUERY API: Get order by ID.
+   */
+  getOrderById: staffProcedure
+    .input(z.object({ id: z.string().nullish() }))
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+
+      if (!id) return null;
+
+      const order = await db.order.findUnique({
+        where: { id },
+        include: {
+          items: {
+            include: { menuItem: true },
+          },
+          owner: true,
+        },
+      });
+
+      return order ?? null;
     }),
 });

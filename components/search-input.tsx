@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
 import qs from "query-string";
 import { Search } from "lucide-react";
@@ -26,18 +26,16 @@ export default function SearchInput({ placeholder, className }: Props) {
 
   useEffect(() => {
     const parsedUrl = qs.parseUrl(window.location.href);
-
     const url = qs.stringifyUrl(
       {
         url: pathname,
         query: {
           ...parsedUrl.query,
-          search: debouncedValue,
+          q: debouncedValue,
         },
       },
       { skipEmptyString: true, skipNull: true },
     );
-
     router.push(url);
   }, [pathname, router, debouncedValue]);
 

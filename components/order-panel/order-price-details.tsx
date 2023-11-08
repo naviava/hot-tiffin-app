@@ -20,7 +20,7 @@ export default function OrderPriceDetails() {
       <div className="border-b border-dashed border-gray-400 py-1" />
       <div className="flex items-center justify-between py-2">
         <h5 className="text-muted-foreground">Total</h5>
-        <p className="font-extrabold">
+        <p className="font-extrabold text-lg">
           ${getTotalWithTax().toFixed(2).replace(".", ",")}
         </p>
       </div>
