@@ -7,7 +7,7 @@ import { Info } from "lucide-react";
 import { FcLike } from "react-icons/fc";
 import { AnimatePresence } from "framer-motion";
 
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 
 import OrderQuantityButtons from "~/components/orders/order-quantity-buttons";
 import {

@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 
 interface Props {
   isLoading: boolean;

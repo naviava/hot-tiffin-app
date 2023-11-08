@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 
 import OrderItem from "~/components/orders/order-item";
 import { ScrollArea } from "~/components/ui/scroll-area";

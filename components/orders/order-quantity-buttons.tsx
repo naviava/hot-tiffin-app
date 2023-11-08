@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
 
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 
 interface Props {
   id: string;

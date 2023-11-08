@@ -2,7 +2,7 @@
 
 import { ShoppingCart } from "lucide-react";
 
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 
 import OrderPanel from "~/components/orders/order-panel";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";

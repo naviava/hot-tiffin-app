@@ -1,4 +1,4 @@
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 
 export default function OrderPriceDetails() {
   const { getTotalQuantity, getTotalPrice, getTotalWithTax } = useOrderStore();

@@ -1,5 +1,5 @@
 import { OrderType } from "@prisma/client";
-import { useOrderStore } from "~/hooks/use-order-store";
+import { useOrderStore } from "~/store/use-order-store";
 import { cn } from "~/lib/utils";
 
 interface Props {
