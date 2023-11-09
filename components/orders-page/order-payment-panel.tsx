@@ -1,13 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { toast } from "sonner";
+import { CheckCircle } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { PaymentMethodType } from "@prisma/client";
 
+import { useIsMounted } from "~/hooks/use-is-mounted";
 import { useMediaQuery } from "~/hooks/use-media-query";
 
 import { Button } from "~/components/ui/button";
@@ -25,6 +27,9 @@ interface Props {
 
 // TODO: Change isLoading states from false to mutation state.
 export default function OrderPaymentPanel({ isSheet }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { isDesktop } = useMediaQuery();
   const searchParams = useSearchParams();
 
@@ -34,6 +39,18 @@ export default function OrderPaymentPanel({ isSheet }: Props) {
   useEffect(() => setOrderId(searchParams.get("orderId")), [searchParams]);
 
   const { data: order } = trpc.order.getOrderById.useQuery({ id: orderId });
+
+  const { mutate: updateOrderStatus, isLoading } =
+    trpc.order.updateOrderStatus.useMutation({
+      onError: ({ message }) => toast.error(message),
+      onSuccess: () => {
+        toast.success("Order marked as paid");
+        router.push(pathname);
+      },
+    });
+
+  const isMounted = useIsMounted();
+  if (!isMounted) return null;
 
   return (
     <AnimatePresence>
@@ -52,13 +69,15 @@ export default function OrderPaymentPanel({ isSheet }: Props) {
             <OrderPaymentHeader
               orderNumber={order.orderNumber}
               setOrderId={setOrderId}
-              isLoading={false}
+              isLoading={isLoading}
               isSheet={isSheet}
             />
             <PaymentMethodSelector
               paymentMethod={paymentMethod}
               setPaymentMethod={setPaymentMethod}
-              isLoading={false}
+              isLoading={isLoading}
+              isPaid={order.isPaid}
+              orderPaymentMethod={order.paymentMethod}
             />
             <AllOrderPaymentItems orderId={order.id} />
             <OrderPaymentPriceDetails
@@ -70,14 +89,27 @@ export default function OrderPaymentPanel({ isSheet }: Props) {
               totalWithTax={order.totalWithTax}
             />
           </div>
-          <Button
-            variant="theme"
-            disabled={false}
-            onClick={() => {}}
-            className="text-lg font-semibold"
-          >
-            Mark as Paid
-          </Button>
+          {!order.isPaid ? (
+            <Button
+              variant="theme"
+              disabled={isLoading}
+              onClick={() =>
+                updateOrderStatus({
+                  id: order.id,
+                  status: "COMPLETED",
+                  paymentMethod: paymentMethod,
+                })
+              }
+              className="text-lg font-semibold"
+            >
+              Mark as Paid
+            </Button>
+          ) : (
+            <div className="flex items-center justify-center text-lg font-bold text-emerald-600">
+              <CheckCircle className="mr-2 h-5 w-5" />
+              <span>Order Paid</span>
+            </div>
+          )}
         </motion.section>
       )}
     </AnimatePresence>

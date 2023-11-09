@@ -2,6 +2,7 @@
 
 import { Fragment } from "react";
 
+import { useIsMounted } from "~/hooks/use-is-mounted";
 import { useMediaQuery } from "~/hooks/use-media-query";
 
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
@@ -16,6 +17,9 @@ interface Props {
 
 export default function OrdersList({ orders }: Props) {
   const { isDesktop } = useMediaQuery();
+
+  const isMounted = useIsMounted();
+  if (!isMounted) return null;
 
   return (
     <ul className="space-y-6">

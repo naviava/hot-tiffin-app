@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { OrderStatus, OrderType } from "@prisma/client";
+import { OrderStatus, OrderType, PaymentMethodType } from "@prisma/client";
 
 import { db } from "~/lib/db";
 import { generateOrderNo } from "~/lib/generate-order-no";
@@ -118,5 +118,44 @@ export const orderRouter = router({
       });
 
       return order ?? null;
+    }),
+
+  /**
+   * MUTATION API: Update order status. Takes an order ID,
+   * status and optional payment method if the order is
+   * being marked as completed..
+   */
+  updateOrderStatus: staffProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.nativeEnum(OrderStatus),
+        paymentMethod: z.nativeEnum(PaymentMethodType),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, status, paymentMethod } = input;
+
+      const order = await db.order.findUnique({
+        where: { id },
+      });
+
+      if (!order) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
+      }
+
+      await db.order.update({
+        where: { id },
+        data: {
+          status,
+          paymentMethod,
+          isPaid: true,
+        },
+      });
+
+      return true;
     }),
 });
