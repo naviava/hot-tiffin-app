@@ -14,10 +14,14 @@ export default async function DashboardLayout({
   if (!user) return redirect("/");
   if (user.role === "CUSTOMER") return redirect("/");
 
+  if (user.role === "EMPLOYEE" && !user.empId) {
+    await serverClient.user.createEmployeeId();
+  }
+
   return (
     <>
       <Navbar />
-      <main className="h-[calc(100vh-48px)] overflow-x-hidden pt-12 md:pl-[7rem] md:pt-0">
+      <main className="h-full overflow-x-hidden pt-12 md:pl-[7rem] md:pt-0">
         {children}
       </main>
     </>

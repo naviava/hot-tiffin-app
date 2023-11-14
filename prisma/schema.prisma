@@ -51,6 +51,12 @@ enum UserRole {
   ADMIN
 }
 
+enum GenderType {
+  MALE
+  FEMALE
+  UNSPECIFIED
+}
+
 model User {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   name           String
@@ -61,7 +67,9 @@ model User {
   hashedPassword String?
   role           UserRole      @default(EMPLOYEE)
   disabled       Boolean       @default(false)
-  departmentId   String?
+  gender         GenderType    @default(UNSPECIFIED)
+  phoneNumber    String?
+  dob            DateTime?
   accounts       Account[]
   sessions       Session[]
   orders         Order[]
@@ -72,8 +80,6 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([departmentId])
 }
 
 enum OrderStatus {
@@ -170,7 +176,7 @@ model Address {
   city          String
   state         String
   postalCode    String
-  isDefault     Boolean
+  isDefault     Boolean @default(false)
   customerId    String  @db.ObjectId
   customer      User    @relation(fields: [customerId], references: [id], onDelete: Cascade)
   orders        Order[]

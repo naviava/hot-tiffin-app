@@ -73,7 +73,7 @@ export default function NavbarItems({ setIsOpen }: Props) {
   const pathname = usePathname() as RouteHrefType;
   const { isMobile } = useMediaQuery();
   const [activeSection, setActiveSection] = useState<RouteHrefType | null>(
-    pathname.startsWith("/dashboard") ? pathname : null,
+    null,
   );
 
   const handleClick = useCallback(
@@ -88,6 +88,15 @@ export default function NavbarItems({ setIsOpen }: Props) {
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
+
+  useEffect(() => {
+    if (pathname.startsWith("/dashboard")) {
+      setActiveSection(pathname);
+    } else {
+      setActiveSection(null);
+    }
+  }, [pathname]);
+
   if (!isMounted) return null;
 
   return (

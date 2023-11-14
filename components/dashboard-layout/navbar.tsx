@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 import { Menu } from "lucide-react";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 
 import { useMediaQuery } from "~/hooks/use-media-query";
 
+import UserAvatar from "~/components/user-avatar";
 import NavbarItems from "~/components/dashboard-layout/navbar-items";
+import { cn } from "~/lib/utils";
 
 const backdropVariants: Variants = {
   hidden: { opacity: 0 },
@@ -23,6 +27,8 @@ const navbarVariants: Variants = {
 };
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   const { isMobile } = useMediaQuery();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -67,7 +73,24 @@ export default function Navbar() {
             >
               <h2>LOGO</h2>
               <NavbarItems setIsOpen={setIsOpen} />
-              <p className="text-center">Avatar</p>
+              <Link href="/dashboard/profile">
+                <div
+                  className={cn(
+                    "flex flex-col items-center justify-center gap-y-1 rounded-xl px-3 py-4 transition-all",
+                    pathname === "/dashboard/profile" && "bg-theme/10",
+                  )}
+                >
+                  <UserAvatar />
+                  <span
+                    className={cn(
+                      "select-none text-sm font-semibold tracking-wide text-muted-foreground",
+                      pathname === "/dashboard/profile" && "text-theme",
+                    )}
+                  >
+                    Profile
+                  </span>
+                </div>
+              </Link>
             </motion.nav>
           </>
         )}

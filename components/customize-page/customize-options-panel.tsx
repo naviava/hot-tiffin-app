@@ -51,8 +51,8 @@ export default function CustomizeOptionsPanel({
       >
         {routes.map((item) => (
           <motion.li
-            variants={listVariants}
             key={item.sectionId}
+            variants={listVariants}
             onClick={() => setActiveSection(item.sectionId)}
             className="relative flex cursor-pointer items-center px-8 py-2 text-muted-foreground transition md:px-2 lg:px-8"
           >
