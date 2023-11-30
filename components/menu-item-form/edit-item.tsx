@@ -1,30 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import * as z from "zod";
 import { toast } from "sonner";
-import { Variants, motion } from "framer-motion";
-import { useForm } from "react-hook-form";
+import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
-import NameInput from "~/components/add-menu-item-form/name-input";
-import PriceInput from "~/components/add-menu-item-form/price-input";
+import NameInput from "~/components/menu-item-form/name-input";
+import PriceInput from "~/components/menu-item-form/price-input";
 import { SingleImageDropzone } from "~/components/single-image-dropzone";
-import DescriptionInput from "~/components/add-menu-item-form/description-input";
-import CategoryCombobox from "~/components/add-menu-item-form/category-combobox";
+import DescriptionInput from "~/components/menu-item-form/description-input";
+import CategoryCombobox from "~/components/menu-item-form/category-combobox";
 
 import { trpc } from "~/app/_trpc/client";
 import { useEdgeStore } from "~/lib/edgestore";
+import Image from "next/image";
 
 const menuItemSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Name cannot be empty" })
     .max(50, { message: "Name cannot be longer than 50 characters" }),
-  description: z.string().nullish(),
+  description: z.z.string(),
   price: z
     .string()
     .refine((value) => /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(value), {
@@ -35,26 +35,33 @@ const menuItemSchema = z.object({
   image: z.string().nullish(),
 });
 
-export type MenuItemSchemaType = z.infer<typeof menuItemSchema>;
+export type MenuItemSchemaType = UseFormReturn<{
+  name: string;
+  description: string;
+  price: string;
+  categoryId: string;
+  image?: string | undefined | null;
+}>;
 
 interface Props {
-  animationVariants: Variants;
+  itemId: string;
 }
 
-export default function AddMenuItemForm({ animationVariants }: Props) {
-  const [file, setFile] = useState<File>();
+export function EditItem({ itemId }: Props) {
   const { edgestore } = useEdgeStore();
+  const [file, setFile] = useState<File>();
 
+  const { data: menuItem } = trpc.menu.getMenuItemById.useQuery(itemId);
   const { data: categories } = trpc.list.getCategories.useQuery();
 
   const form = useForm<z.infer<typeof menuItemSchema>>({
     resolver: zodResolver(menuItemSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      price: "",
-      categoryId: "",
-      image: "",
+      name: menuItem?.name ?? "",
+      description: menuItem?.description ?? "",
+      price: menuItem?.price.toString() ?? "",
+      categoryId: menuItem?.categoryId ?? "",
+      image: menuItem?.image ?? "",
     },
   });
 
@@ -81,18 +88,23 @@ export default function AddMenuItemForm({ animationVariants }: Props) {
     [addMenuItem],
   );
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => setIsMounted(true), []);
-  if (!isMounted) return null;
-
   return (
     <Form {...form}>
-      <motion.form
-        variants={animationVariants}
+      <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-w-xl space-y-8 rounded-3xl bg-white p-6"
       >
-        <section>
+        <section className="relative">
+          <div className="absolute inset-0">
+            <div className="relative mx-auto h-[200px] w-[200px]">
+              <Image
+                fill
+                src={menuItem?.image || "/menu-item-placeholder-image.jpg"}
+                alt={menuItem?.name || "Menu Item"}
+                className="object-cover"
+              />
+            </div>
+          </div>
           <SingleImageDropzone
             className="mx-auto"
             width={200}
@@ -103,7 +115,12 @@ export default function AddMenuItemForm({ animationVariants }: Props) {
               if (!file) return;
               const res = await edgestore.publicFiles.upload({
                 file,
-                options: { temporary: true },
+                options: {
+                  temporary: true,
+                  replaceTargetUrl: menuItem?.image
+                    ? menuItem.image
+                    : undefined,
+                },
               });
               form.setValue("image", res.url);
             }}
@@ -146,7 +163,7 @@ export default function AddMenuItemForm({ animationVariants }: Props) {
             Submit
           </Button>
         </div>
-      </motion.form>
+      </form>
     </Form>
   );
 }

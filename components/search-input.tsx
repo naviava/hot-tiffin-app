@@ -19,7 +19,6 @@ interface Props {
 export default function SearchInput({ placeholder, className }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const [value, setValue] = useState("");
   const debouncedValue = useDebounce<string>(value, 500);

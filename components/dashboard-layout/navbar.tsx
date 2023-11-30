@@ -11,6 +11,7 @@ import { useMediaQuery } from "~/hooks/use-media-query";
 
 import UserAvatar from "~/components/user-avatar";
 import NavbarItems from "~/components/dashboard-layout/navbar-items";
+
 import { cn } from "~/lib/utils";
 
 const backdropVariants: Variants = {

@@ -9,6 +9,7 @@ import Providers from "~/components/providers/providers";
 import SessionProvider from "~/components/providers/session-provider";
 
 import { cn } from "~/lib/utils";
+import { redirect } from "next/navigation";
 
 const font = Nunito_Sans({ subsets: ["latin"] });
 

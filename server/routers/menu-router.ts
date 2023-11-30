@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
 import { db } from "~/lib/db";
@@ -44,7 +45,7 @@ export const menuRouter = router({
    * QUERY API: Gets all menu items from the database.
    * Takes an optional categoryId parameter to filter by category.
    */
-  getMenuItems: staffProcedure
+  getMenuItems: publicProcedure
     .input(
       z.object({
         query: z.string().nullish(),
@@ -66,5 +67,44 @@ export const menuRouter = router({
       });
 
       return menuItems;
+    }),
+
+  /**
+   * QUERY API: Gets a single menu item from the database.
+   */
+  getMenuItemById: publicProcedure
+    .input(z.string())
+    .query(async ({ input }) => {
+      const item = await db.menuItem.findUnique({
+        where: { id: input },
+        include: { category: true },
+      });
+
+      if (!item)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Menu item not found",
+        });
+
+      return item;
+    }),
+
+  /**
+   * MUTATION API: Deletes a menu item from the database.
+   */
+  deleteMenuItem: staffProcedure
+    .input(z.string())
+    .mutation(async ({ input }) => {
+      const deletedItem = await db.menuItem.delete({
+        where: { id: input },
+      });
+
+      if (!deletedItem)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Menu item not found",
+        });
+
+      return "Successfully deleted menu item";
     }),
 });

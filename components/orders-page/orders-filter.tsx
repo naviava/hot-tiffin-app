@@ -8,15 +8,21 @@ import qs from "query-string";
 import { OrderStatus } from "@prisma/client";
 
 import { cn } from "~/lib/utils";
+import { set } from "date-fns";
 
-interface Props {}
-
-export default function CategoryFilter({}: Props) {
+export default function CategoryFilter() {
   const router = useRouter();
   const pathname = usePathname();
 
+  const searchParams = useSearchParams();
+  const paramsOrderStatus = searchParams.get("orderStatus");
+
   const [selectedOrderStatus, setSelectedOrderStatus] =
-    useState<OrderStatus>("NEW");
+    useState<OrderStatus | null>(
+      !!paramsOrderStatus && paramsOrderStatus in OrderStatus
+        ? (paramsOrderStatus.toUpperCase() as OrderStatus)
+        : null,
+    );
 
   const handleClick = useCallback(
     (status: OrderStatus) => {
@@ -39,7 +45,10 @@ export default function CategoryFilter({}: Props) {
   );
 
   useEffect(() => {
-    if (selectedOrderStatus === "NEW") {
+    if (
+      (!!paramsOrderStatus && !(paramsOrderStatus in OrderStatus)) ||
+      selectedOrderStatus === "NEW"
+    ) {
       const parsedUrl = qs.parseUrl(window.location.href);
 
       const url = qs.stringifyUrl(
@@ -53,8 +62,9 @@ export default function CategoryFilter({}: Props) {
         { skipEmptyString: true, skipNull: true },
       );
       router.push(url);
+      setSelectedOrderStatus("NEW");
     }
-  }, [pathname, router, selectedOrderStatus]);
+  }, [pathname, router, selectedOrderStatus, paramsOrderStatus]);
 
   return (
     <div className="flex flex-wrap gap-x-2 gap-y-4 md:gap-4">

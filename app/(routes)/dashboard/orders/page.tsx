@@ -12,7 +12,10 @@ interface Props {
 
 export default async function OrdersPage({ searchParams }: Props) {
   const orders = await serverClient.order.getAllOrders({
-    status: searchParams.orderStatus,
+    status:
+      searchParams.orderStatus in OrderStatus
+        ? searchParams.orderStatus
+        : undefined,
   });
 
   return (

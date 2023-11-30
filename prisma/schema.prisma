@@ -223,6 +223,6 @@ model Reservation {
 model Category {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   name      String     @unique
-  image     String?
+  icon      String?
   menuItems MenuItem[]
 }

@@ -1,4 +1,4 @@
-import { MenuItemSchemaType } from "~/components/add-menu-item-form";
+import { MenuItemSchemaType } from "~/components/menu-item-form";
 
 import { Input } from "~/components/ui/input";
 import {
@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/form";
 
 interface Props {
-  form: MenuItemSchemaType | any;
+  form: MenuItemSchemaType;
   disabled?: boolean;
 }
 

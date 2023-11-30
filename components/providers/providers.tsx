@@ -1,4 +1,5 @@
-import TRPCProvider from "./trpc-provider";
+import { TRPCProvider } from "./trpc-provider";
+import { ModalProvider } from "./modal-provider";
 import { EdgeStoreProvider } from "~/lib/edgestore";
 
 interface ProvidersProps {
@@ -8,7 +9,10 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
   return (
     <TRPCProvider>
-      <EdgeStoreProvider>{children}</EdgeStoreProvider>
+      <EdgeStoreProvider>
+        <ModalProvider />
+        {children}
+      </EdgeStoreProvider>
     </TRPCProvider>
   );
 }

@@ -12,18 +12,6 @@ import { trpc } from "~/app/_trpc/client";
 
 interface Props {}
 
-// TODO: Change category schema to include icon.
-const categoryIconMap = [
-  { icon: "🍟", name: "Appetizers" },
-  { icon: "🍔", name: "Main Course" },
-  { icon: "🍨", name: "Desserts" },
-  { icon: "🥤", name: "Beverages" },
-  { icon: "🍕", name: "Specials" },
-  { icon: "👶", name: "Kids" },
-  { icon: "🥗", name: "Vegetarian" },
-  { icon: "🥦", name: "Vegan" },
-];
-
 export default function CategoryFilter({}: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -86,12 +74,7 @@ export default function CategoryFilter({}: Props) {
                 "bg-theme/10 font-bold text-theme",
             )}
           >
-            <div className="mr-2">
-              {
-                categoryIconMap.find((item) => item.name === category.name)
-                  ?.icon
-              }
-            </div>
+            <div className="mr-2">{category.icon}</div>
             {category.name}
           </button>
         ))}

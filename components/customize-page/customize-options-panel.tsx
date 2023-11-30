@@ -12,13 +12,7 @@ import { cn } from "~/lib/utils";
 
 export const routes = [
   { Icon: FaBowlFood, label: "Add Item", sectionId: "ADD_ITEM" },
-  { Icon: AiTwotoneEdit, label: "Manage Items", sectionId: "MANAGE_ITEMS" },
   { Icon: MdLibraryAdd, label: "Add Category", sectionId: "ADD_CATEGORY" },
-  {
-    Icon: RiEditBoxFill,
-    label: "Manage Categories",
-    sectionId: "MANAGE_CATEGORIES",
-  },
 ] as const;
 
 type Route = (typeof routes)[number];

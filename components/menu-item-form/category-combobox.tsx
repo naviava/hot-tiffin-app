@@ -1,6 +1,6 @@
 import { Combobox } from "~/components/combobox";
 
-import { MenuItemSchemaType } from "~/components/add-menu-item-form";
+import { MenuItemSchemaType } from "~/components/menu-item-form";
 import {
   FormControl,
   FormField,
@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/form";
 
 interface CategoryComboboxProps {
-  form: MenuItemSchemaType | any;
+  form: MenuItemSchemaType;
   options: { label: string; value: string }[] | undefined;
   disabled?: boolean;
 }

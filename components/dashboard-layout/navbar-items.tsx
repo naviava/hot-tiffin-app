@@ -14,8 +14,9 @@ import { motion } from "framer-motion";
 
 import { GoHomeFill } from "react-icons/go";
 import { ImPieChart } from "react-icons/im";
-import { BiSolidCustomize } from "react-icons/bi";
+import { RiFileEditFill } from "react-icons/ri";
 import { BsFillClockFill } from "react-icons/bs";
+import { BiSolidCustomize } from "react-icons/bi";
 import { FaBellConcierge, FaCartShopping } from "react-icons/fa6";
 
 import { useMediaQuery } from "~/hooks/use-media-query";
@@ -23,12 +24,12 @@ import { useMediaQuery } from "~/hooks/use-media-query";
 import { cn } from "~/lib/utils";
 
 const routes = [
-  {
-    id: uuid(),
-    Icon: GoHomeFill,
-    label: "Home",
-    href: "/dashboard",
-  },
+  // {
+  //   id: uuid(),
+  //   Icon: GoHomeFill,
+  //   label: "Home",
+  //   href: "/dashboard",
+  // },
   {
     id: uuid(),
     Icon: FaBellConcierge,
@@ -41,23 +42,29 @@ const routes = [
     label: "Orders",
     href: "/dashboard/orders",
   },
-  {
-    id: uuid(),
-    Icon: BsFillClockFill,
-    label: "History",
-    href: "/dashboard/history",
-  },
-  {
-    id: uuid(),
-    Icon: ImPieChart,
-    label: "Reports",
-    href: "/dashboard/reports",
-  },
+  // {
+  //   id: uuid(),
+  //   Icon: BsFillClockFill,
+  //   label: "History",
+  //   href: "/dashboard/history",
+  // },
+  // {
+  //   id: uuid(),
+  //   Icon: ImPieChart,
+  //   label: "Reports",
+  //   href: "/dashboard/reports",
+  // },
   {
     id: uuid(),
     Icon: BiSolidCustomize,
     label: "Customize",
     href: "/dashboard/customize",
+  },
+  {
+    id: uuid(),
+    Icon: RiFileEditFill,
+    label: "Manage",
+    href: "/dashboard/manage",
   },
 ] as const;
 
