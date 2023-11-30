@@ -7,9 +7,10 @@ import { motion } from "framer-motion";
 import { IoFastFood } from "react-icons/io5";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 
-import { ManageMenu } from "~/components/manage-page/manage-menu";
-import CategoryFilter from "~/components/category-filter";
 import SearchInput from "~/components/search-input";
+import { CategoryFilter } from "~/components/category-filter";
+import { ManageMenu } from "~/components/manage-page/manage-menu";
+import { ManageCategories } from "~/components/manage-page/manage-categories";
 
 const OPTIONS = [
   {
@@ -29,7 +30,7 @@ export default function ManagePage() {
     useState<(typeof OPTIONS)[number]["label"]>("MENU");
 
   return (
-    <div className="m-4 gap-x-4 md:mx-4 md:my-12">
+    <div className="m-4 gap-x-4 pb-24 md:mx-4 md:my-0">
       <div className="mb-6 mt-6 grid w-full grid-cols-2">
         {OPTIONS.map((option) => (
           <div
@@ -60,7 +61,7 @@ export default function ManagePage() {
           <ManageMenu />
         </div>
       )}
-      {activeOption === "CATEGORIES" && <p>Categories</p>}
+      {activeOption === "CATEGORIES" && <ManageCategories />}
     </div>
   );
 }

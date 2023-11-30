@@ -1,11 +1,14 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import Image from "next/image";
 
 import * as z from "zod";
 import { toast } from "sonner";
-import { UseFormReturn, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useMenuItemModal } from "~/hooks/use-menu-item-modal";
 
 import { Form } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
@@ -17,14 +20,13 @@ import CategoryCombobox from "~/components/menu-item-form/category-combobox";
 
 import { trpc } from "~/app/_trpc/client";
 import { useEdgeStore } from "~/lib/edgestore";
-import Image from "next/image";
 
 const menuItemSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Name cannot be empty" })
     .max(50, { message: "Name cannot be longer than 50 characters" }),
-  description: z.z.string(),
+  description: z.string(),
   price: z
     .string()
     .refine((value) => /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(value), {
@@ -35,14 +37,6 @@ const menuItemSchema = z.object({
   image: z.string().nullish(),
 });
 
-export type MenuItemSchemaType = UseFormReturn<{
-  name: string;
-  description: string;
-  price: string;
-  categoryId: string;
-  image?: string | undefined | null;
-}>;
-
 interface Props {
   itemId: string;
 }
@@ -51,7 +45,11 @@ export function EditItem({ itemId }: Props) {
   const { edgestore } = useEdgeStore();
   const [file, setFile] = useState<File>();
 
-  const { data: menuItem } = trpc.menu.getMenuItemById.useQuery(itemId);
+  const { onClose: closeModal } = useMenuItemModal();
+
+  const utils = trpc.useUtils();
+  const { data: menuItem, isFetching } =
+    trpc.menu.getMenuItemById.useQuery(itemId);
   const { data: categories } = trpc.list.getCategories.useQuery();
 
   const form = useForm<z.infer<typeof menuItemSchema>>({
@@ -65,28 +63,33 @@ export function EditItem({ itemId }: Props) {
     },
   });
 
-  const { mutate: addMenuItem, isLoading } = trpc.menu.addMenuItem.useMutation({
-    onError: ({ message }) => toast.error(message),
-    onSuccess: async () => {
-      toast.success("Menu item added successfully");
+  const { mutate: updateMenuItem, isLoading } =
+    trpc.menu.updateMenuItem.useMutation({
+      onError: ({ message }) => toast.error(message),
+      onSuccess: async () => {
+        toast.success("Menu item added successfully");
 
-      if (!!form.getValues("image")) {
-        await edgestore.publicFiles.confirmUpload({
-          url: form.getValues("image") as string,
-        });
-      }
+        if (!!form.getValues("image")) {
+          await edgestore.publicFiles.confirmUpload({
+            url: form.getValues("image") as string,
+          });
+        }
 
-      form.reset();
-      setFile(undefined);
-    },
-  });
+        utils.menu.invalidate();
+        setFile(undefined);
+        closeModal();
+      },
+    });
 
   const onSubmit = useCallback(
     async (values: z.infer<typeof menuItemSchema>) => {
-      addMenuItem(values);
+      updateMenuItem({ ...values, id: itemId });
     },
-    [addMenuItem],
+    [updateMenuItem, itemId],
   );
+
+  // TODO: Create loadting skeleton.
+  if (isFetching) return <p>Getting item information...</p>;
 
   return (
     <Form {...form}>

@@ -26,7 +26,7 @@ const menuItemSchema = z.object({
     .string()
     .min(1, { message: "Name cannot be empty" })
     .max(50, { message: "Name cannot be longer than 50 characters" }),
-  description: z.z.string(),
+  description: z.string(),
   price: z
     .string()
     .refine((value) => /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(value), {

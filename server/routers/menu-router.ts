@@ -42,6 +42,44 @@ export const menuRouter = router({
     }),
 
   /**
+   * MUTATION API: Updates a menu item in the database.
+   */
+  updateMenuItem: staffProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1).max(50),
+        description: z.string().nullish(),
+        price: z
+          .string()
+          .refine((value) => /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(value), {
+            message:
+              "Price must be a positive number with up to two digits after the decimal point",
+          }),
+        image: z.string().nullish(),
+        categoryId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, name, description, price, image, categoryId } = input;
+
+      await db.menuItem.update({
+        where: { id },
+        data: {
+          name,
+          description,
+          price: parseFloat(price),
+          image,
+          category: {
+            connect: { id: categoryId },
+          },
+        },
+      });
+
+      return "Successfully edited menu item";
+    }),
+
+  /**
    * QUERY API: Gets all menu items from the database.
    * Takes an optional categoryId parameter to filter by category.
    */

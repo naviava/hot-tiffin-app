@@ -1,19 +1,24 @@
 import { useMenuItemModal } from "~/hooks/use-menu-item-modal";
+
 import { Dialog, DialogContent } from "~/components/ui/dialog";
+import { EditItem } from "~/components/menu-item-form/edit-item";
+
 import { trpc } from "~/app/_trpc/client";
-import { z } from "zod";
-import { EditItem } from "../menu-item-form/edit-item";
 
 export function MenuItemModal() {
-  const modal = useMenuItemModal();
+  const id = useMenuItemModal((state) => state.id);
+  const isOpen = useMenuItemModal((state) => state.isOpen);
+  const onClose = useMenuItemModal((state) => state.onClose);
 
-  const { data: item } = trpc.menu.getMenuItemById.useQuery(modal.id);
+  const { data: item } = trpc.menu.getMenuItemById.useQuery(id, {
+    enabled: isOpen,
+  });
 
   // TODO: Add loading state.
-  if (!item) return <p>Loading...</p>;
+  if (!item) return null;
 
   return (
-    <Dialog open={modal.isOpen} onOpenChange={modal.onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <EditItem itemId={item?.id} />
       </DialogContent>

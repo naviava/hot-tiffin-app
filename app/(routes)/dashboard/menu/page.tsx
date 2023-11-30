@@ -1,6 +1,6 @@
 import MenuGrid from "~/components/menu-grid";
 import SearchInput from "~/components/search-input";
-import CategoryFilter from "~/components/category-filter";
+import { CategoryFilter } from "~/components/category-filter";
 import OrderPanel from "~/components/order-panel/order-panel";
 import MobileOrderPanel from "~/components/order-panel/mobile-order-panel";
 

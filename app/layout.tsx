@@ -9,13 +9,21 @@ import Providers from "~/components/providers/providers";
 import SessionProvider from "~/components/providers/session-provider";
 
 import { cn } from "~/lib/utils";
-import { redirect } from "next/navigation";
 
 const font = Nunito_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Hot Tiffin",
+  title: {
+    default: "Hot Tiffin",
+    template: `%s | Hot Tiffin`,
+  },
   description: "Restaurant management made easy.",
+  icons: [
+    {
+      url: "/logo-hot-tiffin.svg",
+      href: "/logo-hot-tiffin.svg",
+    },
+  ],
 };
 
 export default async function RootLayout({

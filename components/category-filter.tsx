@@ -10,9 +10,7 @@ import CategoryFilterSkeleton from "~/components/loading-states/category-filter-
 import { cn } from "~/lib/utils";
 import { trpc } from "~/app/_trpc/client";
 
-interface Props {}
-
-export default function CategoryFilter({}: Props) {
+export function CategoryFilter() {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
