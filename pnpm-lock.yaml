@@ -77,6 +77,9 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  emoji-picker-react:
+    specifier: ^4.5.16
+    version: 4.5.16(react@18.2.0)
   framer-motion:
     specifier: 10.16.4
     version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
@@ -3138,6 +3141,15 @@ packages:
   /electron-to-chromium@1.4.576:
     resolution: {integrity: sha512-yXsZyXJfAqzWk1WKryr0Wl0MN2D47xodPvEEwlVePBnhU5E7raevLQR+E6b9JAD3GfL/7MbAL9ZtWQQPcLx7wA==}
     dev: true
+
+  /emoji-picker-react@4.5.16(react@18.2.0):
+    resolution: {integrity: sha512-RXaOH1EapmqbtRSMaHnwJWMfA6kiPipg/gN4cFOQRQKvrTQIA3K5+yUyzFuq8O7umIEtXUi1C1tf2dPvyyn44Q==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}

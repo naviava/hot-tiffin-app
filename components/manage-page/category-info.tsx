@@ -1,12 +1,14 @@
-import { Dispatch, SetStateAction, forwardRef, memo, useCallback } from "react";
-import { Input } from "~/components/ui/input";
-import { CategorySchemaType } from "./category-item";
+import { forwardRef, memo } from "react";
+
 import {
   FormControl,
   FormField,
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { EmojiPopover } from "~/components/emoji-popover";
+import { CategorySchemaType } from "./category-item";
 
 interface Props {
   id: string;
@@ -21,7 +23,11 @@ const _CategoryInfo = forwardRef<HTMLInputElement, Props>(
   ({ icon, id, isEditing, name, form, enableEditing }, ref) => {
     return (
       <div className="flex flex-1 items-center gap-x-2">
-        {!!icon && <p className="cursor-pointer">{icon}</p>}
+        {!!icon && (
+          <EmojiPopover categoryId={id} categoryName={name}>
+            {icon}
+          </EmojiPopover>
+        )}
         {!isEditing ? (
           <p className="cursor-pointer select-none" onClick={enableEditing}>
             {name}
