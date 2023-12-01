@@ -2,6 +2,7 @@
 
 import { trpc } from "~/app/_trpc/client";
 import { CategoryItem } from "./category-item";
+import { AddCategory } from "./add-category";
 
 export function ManageCategories() {
   const { data: categories, isFetching } = trpc.list.getCategories.useQuery();
@@ -20,6 +21,7 @@ export function ManageCategories() {
             icon={category.icon}
           />
         ))}
+      <AddCategory />
     </div>
   );
 }

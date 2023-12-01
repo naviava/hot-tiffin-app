@@ -41,4 +41,37 @@ export const listRouter = router({
 
       return category;
     }),
+
+  /**
+   * MUTATION API: Add category.
+   */
+  addCategory: staffProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        icon: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { icon, name } = input;
+
+      const category = await db.category.create({
+        data: { icon, name },
+      });
+
+      return category;
+    }),
+
+  /**
+   * MUTATION API: Delete category.
+   */
+  deleteCategory: staffProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ ctx, input }) => {
+      const category = await db.category.delete({
+        where: { id: input },
+      });
+
+      return category;
+    }),
 });

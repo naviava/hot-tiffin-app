@@ -16,17 +16,28 @@ interface Props {
   icon: string | null;
   form: CategorySchemaType;
   isEditing: boolean;
+  disabled: boolean;
   enableEditing: () => void;
 }
 
 const _CategoryInfo = forwardRef<HTMLInputElement, Props>(
-  ({ icon, id, isEditing, name, form, enableEditing }, ref) => {
+  ({ icon, id, isEditing, name, form, disabled, enableEditing }, ref) => {
     return (
       <div className="flex flex-1 items-center gap-x-2">
         {!!icon && (
-          <EmojiPopover categoryId={id} categoryName={name}>
-            {icon}
-          </EmojiPopover>
+          <FormField
+            control={form.control}
+            name="icon"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <EmojiPopover categoryId={id} categoryName={name}>
+                    {icon}
+                  </EmojiPopover>
+                </FormControl>
+              </FormItem>
+            )}
+          />
         )}
         {!isEditing ? (
           <p className="cursor-pointer select-none" onClick={enableEditing}>
@@ -42,6 +53,7 @@ const _CategoryInfo = forwardRef<HTMLInputElement, Props>(
                   <Input
                     {...field}
                     ref={ref}
+                    disabled={disabled}
                     className="h-7 rounded-none bg-white px-0 text-base focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </FormControl>

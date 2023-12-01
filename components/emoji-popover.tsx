@@ -25,24 +25,28 @@ function _EmojiPopover({ children, categoryId, categoryName }: Props) {
   const closePopoverRef = useRef<ElementRef<"button">>(null);
 
   const utils = trpc.useUtils();
-  const { mutate: updateCategory } = trpc.list.updateCategory.useMutation({
-    onError: ({ message }) => toast.error(message),
-    onSuccess: (data) => {
-      utils.list.invalidate();
-      toast.success(`Category "${categoryName}" emoji updated to ${data.icon}`);
+  const { mutate: handleUpdateCategory } = trpc.list.updateCategory.useMutation(
+    {
+      onError: ({ message }) => toast.error(message),
+      onSuccess: (data) => {
+        utils.list.invalidate();
+        toast.success(
+          `Category "${categoryName}" emoji updated to ${data.icon}`,
+        );
+      },
     },
-  });
+  );
 
   const handleSetEmoji = useCallback(
     (emojiData: EmojiClickData) => {
-      updateCategory({
+      handleUpdateCategory({
         id: categoryId,
         icon: emojiData.emoji,
         name: categoryName,
       });
       closePopoverRef.current?.click();
     },
-    [categoryId, categoryName, updateCategory],
+    [categoryId, categoryName, handleUpdateCategory],
   );
 
   return (

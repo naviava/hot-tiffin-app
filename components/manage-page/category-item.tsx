@@ -3,17 +3,17 @@
 import { ElementRef, memo, useCallback, useRef, useState } from "react";
 
 import * as z from "zod";
-import { UseFormReturn, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, Edit, Trash2, X } from "lucide-react";
+import { UseFormReturn, useForm } from "react-hook-form";
 
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 
 import { Form } from "~/components/ui/form";
-import { Button } from "~/components/ui/button";
+import { CategoryActions } from "./category-actions";
 import { CategoryInfo } from "./category-info";
+
 import { trpc } from "~/app/_trpc/client";
-import { toast } from "sonner";
 
 const categorySchema = z.object({
   id: z.string(),
@@ -36,6 +36,8 @@ interface Props {
 export const CategoryItem = memo(_CategoryItem);
 function _CategoryItem({ id, name, icon }: Props) {
   const inputRef = useRef<ElementRef<"input">>(null);
+  const formRef = useRef<ElementRef<"form">>(null);
+
   const [isEditing, setIsEditing] = useState(false);
 
   const enableEditing = useCallback(() => {
@@ -55,6 +57,7 @@ function _CategoryItem({ id, name, icon }: Props) {
   );
 
   useEventListener("keydown", handleEscapeKey);
+  useOnClickOutside(formRef, disableEditing);
 
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
@@ -66,25 +69,26 @@ function _CategoryItem({ id, name, icon }: Props) {
   });
 
   const utils = trpc.useUtils();
-  const { mutate: updateCategory } = trpc.list.updateCategory.useMutation({
-    onError: ({ message }) => toast.error(message),
-    onSuccess: (data) => {
-      utils.list.invalidate();
-      disableEditing();
-      toast.success(`Updated category: ${name} --> ${data.name}`);
-    },
-  });
-
+  const { mutate: handleUpdateCategory, isLoading } =
+    trpc.list.updateCategory.useMutation({
+      onError: ({ message }) => toast.error(message),
+      onSuccess: (data) => {
+        disableEditing();
+        utils.list.invalidate();
+        toast.success(`Updated category: ${name} --> ${data.name}`);
+      },
+    });
   const onSubmit = useCallback(
     (values: z.infer<typeof categorySchema>) => {
-      updateCategory(values);
+      handleUpdateCategory(values);
     },
-    [updateCategory],
+    [handleUpdateCategory],
   );
 
   return (
     <Form {...form}>
       <form
+        ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex items-center justify-between gap-x-4 rounded-lg bg-white px-4 py-2"
       >
@@ -95,38 +99,16 @@ function _CategoryItem({ id, name, icon }: Props) {
           name={name}
           icon={icon}
           isEditing={isEditing}
+          disabled={isLoading}
           enableEditing={enableEditing}
         />
-        {!isEditing ? (
-          <div>
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={enableEditing}
-              className="group"
-            >
-              <Edit className="h-5 w-5 text-muted-foreground group-hover:text-theme" />
-            </Button>
-            <Button type="button" size="sm" variant="ghost" className="group">
-              <Trash2 className="h-5 w-5 text-muted-foreground group-hover:text-rose-500" />
-            </Button>
-          </div>
-        ) : (
-          <div>
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={disableEditing}
-            >
-              <X className="h-5 w-5 text-rose-500" />
-            </Button>
-            <Button type="submit" size="sm" variant="ghost">
-              <Check className="h-5 w-5 text-green-600" />
-            </Button>
-          </div>
-        )}
+        <CategoryActions
+          id={id}
+          isEditing={isEditing}
+          disabled={isLoading}
+          enableEditing={enableEditing}
+          disableEditing={disableEditing}
+        />
       </form>
     </Form>
   );
