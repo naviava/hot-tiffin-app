@@ -23,7 +23,11 @@ export function AuthClient() {
   return (
     <div className="flex w-full flex-col items-center gap-y-4 px-10">
       <Logo size={100} />
-      <h1 className="text-2xl font-bold">{currentModule}</h1>
+      <h1 className="text-2xl font-bold">
+        {currentModule === "LOGIN"
+          ? "Welcome to Hot Tiffin"
+          : "Create a new account"}
+      </h1>
       {currentModule === "LOGIN" ? (
         <LoginForm />
       ) : (

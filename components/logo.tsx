@@ -7,7 +7,7 @@ interface Props {
 export function Logo({ size }: Props) {
   return (
     <Image
-      src="logo-hot-tiffin.svg"
+      src="/logo-hot-tiffin.svg"
       alt="Hot Tiffin logo"
       width={size}
       height={size}
