@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
+
 interface DashboardProps {}
 
 export default function Dashboard({}: DashboardProps) {
-  return <p>Home</p>;
+  return redirect("/dashboard/menu");
 }

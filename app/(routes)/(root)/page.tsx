@@ -15,9 +15,8 @@ export default async function Home() {
           <AuthClient />
         </div>
       </div>
-      <footer className="flex justify-end gap-x-4 p-4">
-        <p>Terms of Service</p>
-        <p>Privacy Policy</p>
+      <footer className="flex items-center justify-center gap-x-4 p-4 text-sm text-muted-foreground">
+        &copy; Navin Avadhani 2023
       </footer>
     </div>
   );

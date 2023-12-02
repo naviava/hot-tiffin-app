@@ -88,6 +88,7 @@ export default function ChangePasswordForm({ animationVariants }: Props) {
             <Button
               type="submit"
               variant="theme"
+              disabled={isLoading}
               className="w-full font-semibold"
             >
               Change Password
