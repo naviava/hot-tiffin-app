@@ -9,6 +9,7 @@ import { AnimatePresence, Variants, motion } from "framer-motion";
 
 import { useMediaQuery } from "~/hooks/use-media-query";
 
+import { Logo } from "~/components/logo";
 import UserAvatar from "~/components/user-avatar";
 import NavbarItems from "~/components/dashboard-layout/navbar-items";
 
@@ -72,7 +73,9 @@ export default function Navbar() {
               exit="hidden"
               className="absolute inset-y-0 left-0 z-20 flex w-[7rem] flex-col items-center justify-between bg-white px-4 pb-14 pt-8"
             >
-              <h2>LOGO</h2>
+              <div>
+                <Logo size={50} />
+              </div>
               <NavbarItems setIsOpen={setIsOpen} />
               <Link href="/dashboard/profile">
                 <div

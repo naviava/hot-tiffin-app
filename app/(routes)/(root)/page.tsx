@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AuthClient } from "~/components/auth/auth-client";
 import { serverClient } from "~/app/_trpc/server-client";
 
 export default async function Home() {
@@ -8,15 +8,17 @@ export default async function Home() {
   if (!!user) return redirect("/dashboard");
 
   return (
-    <div className="mx-auto max-w-xl">
-      <div className=" flex justify-between bg-red-300 text-3xl">
-        {/* Hello, {user?.name ? user.name : "World!"} */}
-        {!user ? (
-          <Link href="/api/auth/signin">Sign in</Link>
-        ) : (
-          <Link href="/dashboard">Dashboard</Link>
-        )}
+    <div className="flex h-full flex-col bg-white">
+      <div className="flex flex-1 items-center">
+        <div className="hidden w-[70%] lg:block">Illustration</div>
+        <div className="flex h-full flex-1 items-center justify-center">
+          <AuthClient />
+        </div>
       </div>
+      <footer className="flex justify-end gap-x-4 p-4">
+        <p>Terms of Service</p>
+        <p>Privacy Policy</p>
+      </footer>
     </div>
   );
 }

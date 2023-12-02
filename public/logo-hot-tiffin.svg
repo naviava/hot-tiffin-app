@@ -3,9 +3,9 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
 	 viewBox="0 0 512 512" xml:space="preserve">
 <path style="fill:#FFFFFF;" d="M108.126,98.088h261.682V61.994H72.032l0,0C72.032,81.928,88.192,98.088,108.126,98.088z"/>
-<polygon style="fill:#AACD4C;" points="243.48,7.853 135.196,7.853 153.244,61.994 243.48,61.994 "/>
-<polygon style="fill:#95C11F;" points="261.526,504.147 81.055,504.147 81.055,287.583 171.291,98.088 261.526,287.583 "/>
-<rect x="81.051" y="459.031" style="fill:#AACD4C;" width="180.467" height="45.117"/>
+<polygon style="fill:#EC7905;" points="243.48,7.853 135.196,7.853 153.244,61.994 243.48,61.994 "/>
+<polygon style="fill:#EC7905;" points="261.526,504.147 81.055,504.147 81.055,287.583 171.291,98.088 261.526,287.583 "/>
+<rect x="81.051" y="459.031" style="fill:#EC7905;" width="180.467" height="45.117"/>
 <g>
 	<polygon style="fill:#6A86AC;" points="360.785,61.994 180.314,61.994 198.362,7.853 378.832,7.853 	"/>
 	<polyline style="fill:#6A86AC;" points="171.291,98.088 349.733,98.088 439.968,287.583 439.968,504.147 261.526,504.147 

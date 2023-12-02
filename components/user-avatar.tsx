@@ -21,9 +21,7 @@ interface UserAvatarProps extends AvatarVariantsProps {
 }
 
 export default function UserAvatar({ size, initialData }: UserAvatarProps) {
-  const { data: user } = trpc.user.getUserProfile.useQuery(undefined, {
-    initialData,
-  });
+  const { data: user } = trpc.user.getUserProfile.useQuery();
 
   if (!user) return null;
 

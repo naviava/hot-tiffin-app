@@ -54,7 +54,9 @@ export default function ProfileOptions({ user }: Props) {
       className="flex w-full flex-col items-center space-y-8 rounded-[2rem] bg-white py-8 md:w-[15rem] lg:w-[20rem]"
     >
       <div className="space-y-1">
-        <UserAvatar size="xl" initialData={user} />
+        <div className="m-auto w-fit">
+          <UserAvatar size="xl" initialData={user} />
+        </div>
         <h1 className="text-center text-2xl font-extrabold">{user?.name}</h1>
         <p className="text-center font-medium">{user?.empId}</p>
       </div>
