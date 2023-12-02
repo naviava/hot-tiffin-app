@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 
 import * as z from "zod";
-import bcrypt from "bcrypt";
+import bcrypt, { hash } from "bcrypt";
 import { TRPCError } from "@trpc/server";
 
 import { db } from "~/lib/db";
@@ -15,6 +15,9 @@ import {
 import { GenderType } from "@prisma/client";
 
 export const userRouter = router({
+  /**
+   * QUERY API: Get user profile.
+   */
   getUserProfile: publicProcedure.query(async () => {
     const session = await getServerSession();
     if (!session || !session?.user || !session.user.email) return null;
@@ -38,6 +41,59 @@ export const userRouter = router({
     };
   }),
 
+  /**
+   * MUTATION API: Register new user.
+   */
+  registerUser: publicProcedure
+    .input(
+      z.object({
+        name: z
+          .string()
+          .min(1)
+          .max(50)
+          .regex(new RegExp(/^[a-zA-Z]+[-'s]?[a-zA-Z ]+$/)),
+        email: z.string().email(),
+        password: z
+          .string()
+          .min(6)
+          .regex(
+            new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).*$/),
+          ),
+        confirmPassword: z.string().min(6),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { name, email, password, confirmPassword } = input;
+
+      // Checks if the email already exists.
+      const existingUser = await db.user.findUnique({
+        where: { email },
+      });
+      if (!!existingUser)
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User with that email already exists",
+        });
+
+      // Checks if both passwords are the same.
+      if (password !== confirmPassword)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "The passwords did not match",
+        });
+
+      // Hash the password and create user, if email address is unique.
+      const hashedPassword = await hash(password, 10);
+      await db.user.create({
+        data: { name, email, hashedPassword },
+      });
+
+      return true;
+    }),
+
+  /**
+   * MUTATION API: Create employee ID for staff.
+   */
   createEmployeeId: staffProcedure.mutation(async ({ ctx }) => {
     if (!!ctx.user.empId) {
       throw new TRPCError({
@@ -64,6 +120,9 @@ export const userRouter = router({
     });
   }),
 
+  /**
+   * MUTATION API: Update user profile.
+   */
   editMyProfile: privateProcedure
     .input(
       z.object({
@@ -106,6 +165,9 @@ export const userRouter = router({
       return updatedUser;
     }),
 
+  /**
+   * MUTATION API: Change user password.
+   */
   changePassword: privateProcedure
     .input(
       z.object({
