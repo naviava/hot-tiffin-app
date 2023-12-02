@@ -11,6 +11,7 @@ import CustomizeOptionsPanel, {
   SectionIdType,
 } from "~/components/customize-page/customize-options-panel";
 import { MenuItemForm } from "~/components/menu-item-form";
+import { ManageCategories } from "~/components/manage-page/manage-categories";
 
 const optionsPanelVariants: Variants = {
   initial: { opacity: 0, x: -50 },
@@ -83,8 +84,10 @@ export default function CustomizePage() {
             {activeSection === "ADD_ITEM" && (
               <MenuItemForm animationVariants={formVariants} />
             )}
-            {activeSection === "ADD_CATEGORY" && (
-              <motion.p variants={formVariants}>ADD_CATEGORY</motion.p>
+            {activeSection === "CATEGORIES" && (
+              <motion.p variants={formVariants}>
+                <ManageCategories />
+              </motion.p>
             )}
           </motion.section>
         </AnimatePresence>

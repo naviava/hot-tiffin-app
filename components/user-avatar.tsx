@@ -9,7 +9,7 @@ const avatarVariants = cva("", {
   variants: {
     size: {
       default: "",
-      xl: "h-32 w-32",
+      xl: "h-32 w-32 text-6xl",
     },
   },
   defaultVariants: { size: "default" },
@@ -31,7 +31,9 @@ export default function UserAvatar({ size, initialData }: UserAvatarProps) {
         src={user.image || ""}
         alt={`Profile picture of ${user.name}`}
       />
-      <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
+      <AvatarFallback className="font-bold">
+        {user.name[0].toUpperCase()}
+      </AvatarFallback>
     </Avatar>
   );
 }

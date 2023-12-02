@@ -54,7 +54,7 @@ export default function ProfileOptions({ user }: Props) {
       className="flex w-full flex-col items-center space-y-8 rounded-[2rem] bg-white py-8 md:w-[15rem] lg:w-[20rem]"
     >
       <div className="space-y-1">
-        <div className="m-auto w-fit">
+        <div className="m-auto mb-4 w-fit">
           <UserAvatar size="xl" initialData={user} />
         </div>
         <h1 className="text-center text-2xl font-extrabold">{user?.name}</h1>

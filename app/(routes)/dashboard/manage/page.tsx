@@ -61,7 +61,9 @@ export default function ManagePage() {
           <ManageMenu />
         </div>
       )}
-      {activeOption === "CATEGORIES" && <ManageCategories />}
+      {activeOption === "CATEGORIES" && (
+        <ManageCategories className="mx-auto" />
+      )}
     </div>
   );
 }
