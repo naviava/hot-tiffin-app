@@ -25,7 +25,6 @@ interface Props {
   isSheet?: boolean;
 }
 
-// TODO: Change isLoading states from false to mutation state.
 export default function OrderPaymentPanel({ isSheet }: Props) {
   const router = useRouter();
   const pathname = usePathname();

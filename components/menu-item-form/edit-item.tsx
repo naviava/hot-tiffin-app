@@ -10,8 +10,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useMenuItemModal } from "~/hooks/use-menu-item-modal";
 
-import { Form } from "~/components/ui/form";
+import { Form, FormLabel } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 import NameInput from "~/components/menu-item-form/name-input";
 import PriceInput from "~/components/menu-item-form/price-input";
 import { SingleImageDropzone } from "~/components/single-image-dropzone";
@@ -88,8 +89,7 @@ export function EditItem({ itemId }: Props) {
     [updateMenuItem, itemId],
   );
 
-  // TODO: Create loadting skeleton.
-  if (isFetching) return <p>Getting item information...</p>;
+  if (isFetching) return <EditItemSkeleton />;
 
   return (
     <Form {...form}>
@@ -168,5 +168,64 @@ export function EditItem({ itemId }: Props) {
         </div>
       </form>
     </Form>
+  );
+}
+
+function EditItemSkeleton() {
+  return (
+    <div className="max-w-xl space-y-8 rounded-3xl bg-white p-6">
+      <Skeleton className="mx-auto h-[200px] w-[200px]" />
+      <section className="space-y-4">
+        {/* Name */}
+        <div className="space-y-1">
+          <p className="text-sm font-medium tracking-wide text-muted-foreground">
+            Name of the dish
+          </p>
+          <Skeleton className="h-10 w-full" />
+          <p className="text-sm font-medium tracking-wide text-muted-foreground">
+            This will be the name on the menu.
+          </p>
+        </div>
+        {/* Description */}
+        <div className="space-y-1">
+          <p className="text-sm font-medium tracking-wide text-muted-foreground">
+            Description
+          </p>
+          <Skeleton className="h-32 w-full" />
+        </div>
+        <div className="flex gap-x-4">
+          {/* Price */}
+          <div className="flex-1 space-y-1">
+            <p className="text-sm font-medium tracking-wide text-muted-foreground">
+              Price
+            </p>
+            <Skeleton className="h-10 w-full" />
+          </div>
+          {/* Category */}
+          <div className="flex-1 space-y-1">
+            <p className="text-sm font-medium tracking-wide text-muted-foreground">
+              Category
+            </p>
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+      </section>
+      <div className="flex gap-x-4">
+        <Button
+          disabled
+          variant="theme-outline"
+          className="flex w-full items-center gap-x-2 text-lg transition active:scale-95"
+        >
+          <span className="text-sm">❌</span>Reset form
+        </Button>
+        <Button
+          disabled
+          variant="theme"
+          className="w-full text-lg transition active:scale-95"
+        >
+          Submit
+        </Button>
+      </div>
+    </div>
   );
 }

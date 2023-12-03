@@ -33,7 +33,7 @@ export default function NameInput({ form, disabled }: Props) {
               {...field}
             />
           </FormControl>
-          <FormDescription>This will the name on the menu.</FormDescription>
+          <FormDescription>This will be the name on the menu.</FormDescription>
           <FormMessage />
         </FormItem>
       )}

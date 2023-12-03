@@ -19,7 +19,6 @@ export default function MenuGridSkeleton() {
             <Skeleton className="mx-auto h-6 w-[3rem]" />
           </div>
           <div className="mb-8 flex w-full items-center justify-around">
-            {/* TODO: Add actual number of likes */}
             <div className="flex flex-shrink-0 items-center transition">
               <FcLike className="mr-2" />
               <Skeleton className="h-4 w-4 rounded-full" />

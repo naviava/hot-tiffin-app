@@ -6,6 +6,7 @@ import { BsFillTrash3Fill } from "react-icons/bs";
 import { useMenuItemModal } from "~/hooks/use-menu-item-modal";
 
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 import { DeleteItemModal } from "~/components/modals/delete-item-modal";
 
 import { trpc } from "~/app/_trpc/client";
@@ -29,11 +30,7 @@ export function ManageMenu() {
       </div>
     );
 
-  // TODO: Add loading skeleton.
-  if (isFetching)
-    return (
-      <div className="pt-24 text-center text-muted-foreground">Loading...</div>
-    );
+  if (isFetching) return <ManageMenuSkeleton />;
 
   return (
     <div className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-2">
@@ -77,6 +74,29 @@ export function ManageMenu() {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function ManageMenuSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-2">
+      {Array(4)
+        .fill(null)
+        .map((_, idx) => (
+          <div key={idx} className="flex gap-x-2">
+            <Skeleton className="my-auto h-[100px] w-[100px] bg-neutral-200" />
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-6 w-64 bg-neutral-200" />
+                <Skeleton className="mr-2 h-6 w-6 bg-neutral-200" />
+              </div>
+              <Skeleton className="mt-2 h-6 w-16 bg-neutral-200" />
+              <Skeleton className="mt-2 h-4 w-full bg-neutral-200" />
+              <Skeleton className="mt-1 h-4 w-[97%] bg-neutral-200" />
+            </div>
+          </div>
+        ))}
     </div>
   );
 }

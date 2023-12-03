@@ -14,7 +14,6 @@ export function MenuItemModal() {
     enabled: isOpen,
   });
 
-  // TODO: Add loading state.
   if (!item) return null;
 
   return (

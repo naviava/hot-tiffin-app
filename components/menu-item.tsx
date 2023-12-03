@@ -83,7 +83,10 @@ export default function MenuItem({
         </p>
       </div>
       <div className="mb-8 flex w-full items-center justify-between px-6">
-        {/* TODO: Add actual number of likes */}
+        {/**
+         * TODO: Add actual number of likes,
+         * once user module is implemented.
+         */}
         <div className="flex flex-shrink-0 items-center transition">
           <FcLike className="mr-2" />
           <span>{favCount}</span>
