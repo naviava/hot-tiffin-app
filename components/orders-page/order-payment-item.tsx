@@ -70,7 +70,7 @@ export default function OrderPanelItem({
               <p className="text-xs">x {quantity}</p>
             </div>
             <h4 className="mr-4 font-bold">
-              {(price * quantity).toFixed(2).replace(".", ",")}
+              ${(price * quantity).toFixed(2).replace(".", ",")}
             </h4>
           </div>
         </div>
