@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hot Tiffin - A Simple Restaurant POS System 🍽️🚀
+
+Welcome to Hot Tiffin, a streamlined Restaurant POS system designed for simplicity in daily operations.
+
+## Features
+
+- **Effortless Menu Management:** Add, edit, and organize menu items with ease.
+- **Smooth Orders Management:** Create orders seamlessly with customization options.
+- **Orders History Made Easy:** Track orders based on status for smooth navigation.
+- **Profile Management for Your Team:** Assign unique Employee IDs for personalized staff profiles.
+
+## Technologies Used
+
+- TypeScript
+- Next.js App Router
+- React.js
+- TailwindCSS
+- Prisma
+- tRPC
+- Next-Auth
+- ShadCN UI
+- Framer Motion
+- Zustand
+
+## Behind the Scenes
+
+Hot Tiffin is a work in progress. Your feedback is highly valued to enhance the user experience. Feel free to contribute and make it even better!
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/naviava/hot-tiffin-app.git
+   ```
+2. **Install Dependencies:**
+   ```bash
+   cd hot-tiffin-app
+   npm install
+   ```
+3. **Run the Development Server:**
+   ```bash
+   npm run dev
+   ```
+4. **Explore**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   Open your browser and visit http://localhost:3000 to explore Hot Tiffin.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Feedback and Contributions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Your feedback is welcome! Feel free to open an issue or submit a pull request. Let's make Hot Tiffin even better together!
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Live Demo
 
-## Learn More
+Explore Hot Tiffin live at [https://hot-tiffin.vercel.app](https://hot-tiffin.vercel.app)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Happy dining and coding! 🤘**
