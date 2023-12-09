@@ -59,7 +59,7 @@ export default function OrderPaymentPanel({ isSheet }: Props) {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 20 }}
           className={cn(
-            "sticky my-4 mr-4 flex h-fit w-[20rem] flex-col bg-white px-6 py-6",
+            "my-4 mr-4 flex h-fit w-[20rem] flex-col bg-white px-6 py-6",
             !isSheet && "hidden w-[20rem] xl:flex",
             isDesktop && "rounded-[2rem] shadow-lg",
           )}
